@@ -21,6 +21,24 @@ vector<ll> OrConvolution(vector<ll> a, vector<ll> b) {
     ifwht(conv);
     return conv;
 }
+vector<ll> SubsetConvolution(vector<ll> a, vector<ll> b) {
+    int n = 1, bit = 1;
+    while (n < a.size() || n < b.size()) n <<= 1, bit++;
+    a.resize(n), b.resize(n);
+    vector<vector<ll>> A(bit + 1, vector<ll>(n)), B(bit + 1, vector<ll>(n));
+    for (int i = 0; i < n; i++) {
+        int f = __builtin_popcount(i);
+        A[f][i] = a[i], B[f][i] = b[i];
+    }
+    for (int i = 0; i <= bit; i++) fwht(A[i]), fwht(B[i]);
+    vector<ll> conv(n, 0);
+    for (int k = 0; k < n; k++) {
+        int f = __builtin_popcount(k);
+        for (int i = 0; i <= f; i++) conv[k] += A[i][k] * B[f - i][k];
+    }
+    ifwht(conv);
+    return conv;
+}
 //AND-CONVOLUTION
 void fwht(vector<ll> &a) {
     int n = a.size();
