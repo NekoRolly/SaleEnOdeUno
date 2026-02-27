@@ -43,3 +43,34 @@ vector<ll> polymult(vector<ll> &a, vector<ll> &b) {
     for (int i = 0; i < ans.size(); i++) ans[i] = round(A[i].imag() / 2);
     return ans;
 }
+// 2D-FFT
+void fft2D(vector<vector<cd>> &a, bool invert) {
+    int n = a.size(), m = a[0].size();
+    for (int i = 0; i < n; i++) fft(a[i], invert);
+    vector<cd> b(n);
+    for (int j = 0; j < m; j++) {
+        for (int i = 0; i < n; i++) b[i] = a[i][j];
+        fft(b, invert);
+        for (int i = 0; i < n; i++) a[i][j] = b[i];
+    }
+}
+vector<vector<ll>> convolution2D(vector<vector<ll>> &a, vector<vector<ll>> &b) {
+    int n = 1, logn = 0;
+    while (n < a.size() + b.size() - 1) n <<= 1, logn++;
+    int m = 1, logm = 0;
+    while (m < a[0].size() + b[0].size() - 1) m <<= 1, logm++;
+    calc(max(logn, logm));
+    vector<vector<cd>> A(n, vector<cd>(m));
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            A[i][j] = cd(i < a.size() && j < a[0].size() ? a[i][j] : 0,
+                         i < b.size() && j < b[0].size() ? b[i][j] : 0);
+    fft2D(A, 0);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) A[i][j] *= A[i][j];
+    fft2D(A, 1);
+    vector<vector<ll>> ans(a.size() + b.size() - 1, vector<ll>(a[0].size() + b[0].size() - 1));
+    for (int i = 0; i < ans.size(); i++)
+        for (int j = 0; j < ans[0].size(); j++) ans[i][j] = round(A[i][j].imag() / 2);
+    return ans;
+}
