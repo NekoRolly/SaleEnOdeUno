@@ -1,4 +1,4 @@
-struct ST2D {
+struct ST2D { //Index 0
     int n, m;
     vector<vector<ll>> t;
     ll f(ll a, ll b) {
