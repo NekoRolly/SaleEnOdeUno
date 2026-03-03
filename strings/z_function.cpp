@@ -5,4 +5,4 @@ void z_function(string &s,int zf[]){
         while (i+zf[i] < n && s[i+zf[i]] == s[zf[i]]) zf[i]++;
         if (i+zf[i] > r) l = i, r = i+zf[i];
     }
-}
+} // by NekoRolly

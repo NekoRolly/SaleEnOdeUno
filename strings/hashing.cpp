@@ -23,4 +23,4 @@ struct Hashing{
         ll hq = S(prq[i+len-1], mod-P(prq[i-1], eq[len]));
         return hp*mod + hq;
     }
-} H1, H2;
+} H1, H2; // by NekoRolly
