@@ -1,95 +1,43 @@
-struct segmentTree2D {
-    ll t[2 * MX][2 * MX];
-    ll n, m;
-    segmentTree2D(vector<vector<ll>> &a) {
-        n = a.size();
-        m = a[0].size();
-        build(a, 1, 0, n - 1);
-    }
+struct ST2D {
+    int n, m;
+    vector<vector<ll>> t;
     ll f(ll a, ll b) {
         return a + b;
     }
-    void buildy(vector<vector<ll>> &a, ll idx, ll lx, ll rx, ll idy, ll ly, ll ry) {
-        if (ly == ry) {
-            if (lx == rx) t[idx][idy] = a[lx][ly];
-            else {
-                ll mx = (lx + rx) / 2;
-                ll idlx = idx + 1;
-                ll idrx = idx + 2 * (mx - lx + 1);
-                t[idx][idy] = f(t[idlx][idy], t[idrx][idy]);
-            }
-        } else {
-            ll my = (ly + ry) / 2;
-            ll idly = idy + 1;
-            ll idry = idy + 2 * (my - ly + 1);
-            buildy(a, idx, lx, rx, idly, ly, my);
-            buildy(a, idx, lx, rx, idry, my + 1, ry);
-            t[idx][idy] = f(t[idx][idly], t[idx][idry]);
+    ST2D(vector<vector<ll>> &a) {
+        n = a.size();
+        m = a[0].size();
+        t.assign(2 * n, vector<ll>(2 * m, 0));
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++) t[i + n][j + m] = a[i][j];
+        for (int i = n; i < 2 * n; i++)
+            for (int j = m - 1; j > 0; j--) t[i][j] = f(t[i][j << 1], t[i][j << 1 | 1]);
+        for (int i = n - 1; i > 0; i--)
+            for (int j = 1; j < 2 * m; j++) t[i][j] = f(t[i << 1][j], t[i << 1 | 1][j]);
+    }
+    void update(int x, int y, ll val) {
+        x += n, y += m, t[x][y] = val;
+        for (int j = y; j > 1; j >>= 1) t[x][j >> 1] = f(t[x][j], t[x][j ^ 1]);
+        for (int i = x >> 1; i > 0; i >>= 1) {
+            int j = y;
+            t[i][j] = f(t[i << 1][j], t[i << 1 | 1][j]);
+            for (; j > 1; j >>= 1) t[i][j >> 1] = f(t[i][j], t[i][j ^ 1]);
         }
     }
-    void build(vector<vector<ll>> &a, ll idx, ll lx, ll rx) {
-        if (lx == rx) buildy(a, idx, lx, rx, 1, 0, m - 1);
-        else {
-            ll mx = (lx + rx) / 2;
-            ll idlx = idx + 1;
-            ll idrx = idx + 2 * (mx - lx + 1);
-            build(a, idlx, lx, mx);
-            build(a, idrx, mx + 1, rx);
-            buildy(a, idx, lx, rx, 1, 0, m - 1);
+    ll queryY(int i, int l, int r) {
+        ll ans = 0;
+        for (l += m, r += m + 1; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) ans = f(ans, t[i][l++]);
+            if (r & 1) ans = f(t[i][--r], ans);
         }
+        return ans;
     }
-    ll queryy(ll qly, ll qry, ll idx, ll idy, ll ly, ll ry) {
-        if (qly <= ly && ry <= qry) return t[idx][idy];
-        ll my = (ly + ry) / 2;
-        ll idly = idy + 1;
-        ll idry = idy + 2 * (my - ly + 1);
-        if (qry <= my) return queryy(qly, qry, idx, idly, ly, my);
-        if (my + 1 <= qly) return queryy(qly, qry, idx, idry, my + 1, ry);
-        return f(queryy(qly, qry, idx, idly, ly, my), queryy(qly, qry, idx, idry, my + 1, ry));
-    }
-    ll query(ll qlx, ll qrx, ll qly, ll qry, ll idx, ll lx, ll rx) {
-        if (qlx <= lx && rx <= qrx) return queryy(qly, qry, idx, 1, 0, m - 1);
-        ll mx = (lx + rx) / 2;
-        ll idlx = idx + 1;
-        ll idrx = idx + 2 * (mx - lx + 1);
-        if (qrx <= mx) return query(qlx, qrx, qly, qry, idlx, lx, mx);
-        if (mx + 1 <= qlx) return query(qlx, qrx, qly, qry, idrx, mx + 1, rx);
-        return f(query(qlx, qrx, qly, qry, idlx, lx, mx),
-                 query(qlx, qrx, qly, qry, idrx, mx + 1, rx));
-    }
-    ll query(ll qlx, ll qrx, ll qly, ll qry) {
-        return query(qlx, qrx, qly, qry, 1, 0, n - 1);
-    }
-    void updatey(ll posy, ll val, ll idx, ll lx, ll rx, ll idy, ll ly, ll ry) {
-        if (ly == ry) {
-            if (lx == rx) t[idx][idy] = val;
-            else {
-                ll mx = (lx + rx) / 2;
-                ll idlx = idx + 1;
-                ll idrx = idx + 2 * (mx - lx + 1);
-                t[idx][idy] = f(t[idlx][idy], t[idrx][idy]);
-            }
-        } else {
-            ll my = (ly + ry) / 2;
-            ll idly = idy + 1;
-            ll idry = idy + 2 * (my - ly + 1);
-            if (posy <= my) updatey(posy, val, idx, lx, rx, idly, ly, my);
-            else updatey(posy, val, idx, lx, rx, idry, my + 1, ry);
-            t[idx][idy] = f(t[idx][idly], t[idx][idry]);
+    ll query(int lx, int rx, int ly, int ry) {
+        ll ans = 0;
+        for (x1 += n, x2 += n + 1; x1 < x2; x1 >>= 1, x2 >>= 1) {
+            if (x1 & 1) ans = f(ans, queryY(x1++, y1, y2));
+            if (x2 & 1) ans = f(queryY(--x2, y1, y2), ans);
         }
-    }
-    void update(ll posx, ll posy, ll val, ll idx, ll lx, ll rx) {
-        if (lx == rx) updatey(posy, val, idx, lx, rx, 1, 0, m - 1);
-        else {
-            ll mx = (lx + rx) / 2;
-            ll idlx = idx + 1;
-            ll idrx = idx + 2 * (mx - lx + 1);
-            if (posx <= mx) update(posx, posy, val, idlx, lx, mx);
-            else update(posx, posy, val, idrx, mx + 1, rx);
-            updatey(posy, val, idx, lx, rx, 1, 0, m - 1);
-        }
-    }
-    void update(ll posx, ll posy, ll val) {
-        update(posx, posy, val, 1, 0, n - 1);
+        return ans;
     }
 };
