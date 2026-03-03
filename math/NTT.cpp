@@ -53,7 +53,7 @@ void ntt(vector<int> &a, bool invert, int mod) {
         for (int i = 0; i < n; i++) a[i] = mult(a[i], invn, mod);
     }
 }
-vector<int> polymultmod(vector<int> a, vector<int> b, int mod = MOD) {
+vector<int> convolution(vector<int> a, vector<int> b, int mod = MOD) {
     int n = 1, log = 0, rn = a.size() + b.size() - 1;
     while (n < a.size() + b.size() - 1) n <<= 1, log++;
     findroot(mod);
@@ -63,5 +63,34 @@ vector<int> polymultmod(vector<int> a, vector<int> b, int mod = MOD) {
     for (int i = 0; i < n; i++) a[i] = mult(a[i], b[i], mod);
     ntt(a, 1, mod);
     a.resize(rn);
+    return a;
+}
+// 2D-FFT
+void ntt2D(vector<vector<int>> &a, bool invert, int mod) {
+    int n = a.size(), m = a[0].size();
+    for (int i = 0; i < n; i++) ntt(a[i], invert, mod);
+    vector<int> b(n);
+    for (int j = 0; j < m; j++) {
+        for (int i = 0; i < n; i++) b[i] = a[i][j];
+        ntt(b, invert, mod);
+        for (int i = 0; i < n; i++) a[i][j] = b[i];
+    }
+}
+vector<vector<int>> convolution2D(vector<vector<int>> a, vector<vector<int>> b,
+                                  int mod = MOD) {
+    int n = 1, logn = 0, rn = a.size() + b.size() - 1;
+    while (n < rn) n <<= 1, logn++;
+    int m = 1, logm = 0, rm = a[0].size() + b[0].size() - 1;
+    while (m < rm) m <<= 1, logm++;
+    findroot(mod);
+    calc(max(logn, logm), mod);
+    a.resize(n), b.resize(n);
+    for (int i = 0; i < n; i++) a[i].resize(m), b[i].resize(m);
+    ntt2D(a, 0, mod), ntt2D(b, 0, mod);
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) a[i][j] = mult(a[i][j], b[i][j], mod);
+    ntt2D(a, 1, mod);
+    a.resize(rn);
+    for (int i = 0; i < rn; i++) a[i].resize(rm);
     return a;
 }
