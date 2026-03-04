@@ -1,53 +1,32 @@
-const int K = 26;
+struct Aho_Corasick{
+    int t[N][K],cur;
+    int pa[N],go[N][K],lnk[N];
+    queue<int> qu;
 
-struct Vertex {
-    int next[K];
-    bool output = false;
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];
-
-    Vertex(int p=-1, char ch='$') : p(p), pch(ch) {
-        fill(begin(next), end(next), -1);
-        fill(begin(go), end(go), -1);
-    }
-};
-
-vector<Vertex> t(1);
-
-void add_string(string const& s) {
-    int v = 0;
-    for (char ch : s) {
-        int c = ch - 'a';
-        if (t[v].next[c] == -1) {
-            t[v].next[c] = t.size();
-            t.emplace_back(v, ch);
+    int insert(string &s){
+        int u = 0;
+        for (char &c : s){
+            int k = c-'a';
+            if (t[u][k] == 0)
+                t[u][k] = ++cur, pa[cur] = u;
+            u = t[u][k];
         }
-        v = t[v].next[c];
+        return u;
     }
-    t[v].output = true;
-}
 
-int go(int v, char ch);
-
-int get_link(int v) {
-    if (t[v].link == -1) {
-        if (v == 0 || t[v].p == 0)
-            t[v].link = 0;
-        else
-            t[v].link = go(get_link(t[v].p), t[v].pch);
+    void bfs(){
+        fill(lnk+1, lnk+cur+1, -1);
+        for (qu.push(0); !qu.empty(); ){
+            int u = qu.front(); qu.pop();
+            for (int k=0; k<K; k++){
+                int v = t[u][k];
+                if (v == 0) go[u][k] = go[lnk[u]][k];
+                else{
+                    lnk[v] = u == 0 ? 0 : go[lnk[u]][k];
+                    go[u][k] = t[u][k];
+                    qu.push(v);
+                }
+            }
+        }
     }
-    return t[v].link;
-}
-
-int go(int v, char ch) {
-    int c = ch - 'a';
-    if (t[v].go[c] == -1) {
-        if (t[v].next[c] != -1)
-            t[v].go[c] = t[v].next[c];
-        else
-            t[v].go[c] = v == 0 ? 0 : go(get_link(v), ch);
-    }
-    return t[v].go[c];
-}
+} aho; // by NekoRolly
