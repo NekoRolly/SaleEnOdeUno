@@ -1,3 +1,4 @@
+
 === Combinatoria
 
 ==== General
@@ -13,29 +14,29 @@ $ sum_(k=0)^r binom(m, k) binom(n, r-k) = binom(m+n, r) $
 *Identidad del Palo de Hockey (Hockey-Stick):*
 $ sum_(i=r)^n binom(i, r) = binom(n+1, r+1) $
 
-==== Triángulo de Pascal
-- En una fila $p$ donde $p$ es un número primo, todos los términos en esa fila excepto los unos son múltiplos de $p$.
-- *Teorema de Kummer*: Para enteros $n >= m >= 0$ y un número primo $p$, la mayor potencia de $p$ que divide a $binom(n, m)$ es igual al número de acarreos cuando $m$ se suma a $n-m$ en base $p$.
+==== Triangulo de Pascal
+- En una fila $p$ donde $p$ es un numero primo, todos los terminos en esa fila excepto los unos son multiplos de $p$.
+- *Teorema de Kummer*: Para enteros $n >= m >= 0$ y un numero primo $p$, la mayor potencia de $p$ que divide a $binom(n, m)$ es igual al numero de acarreos cuando $m$ se suma a $n-m$ en base $p$.
 
-==== Números de Catalan
-- Fórmula general: $C_n = 1/(n+1) binom(2n, n)$
+==== Numeros de Catalan
+- Formula general: $C_n = 1/(n+1) binom(2n, n)$
 - Recurrencia: $C_0 = 1, C_1 = 1$ y $C_n = sum_(k=0)^(n-1) C_k C_(n-1-k)$
-Representa, entre otras cosas, el número de secuencias de paréntesis balanceadas o triangulaciones de un polígono convexo.
+Representa, entre otras cosas, el numero de secuencias de parentesis balanceadas o triangulaciones de un poligono convexo.
 
-==== Números de Stirling (Primera y Segunda Especie)
-- *Primera especie* (número de permutaciones con $k$ ciclos disjuntos): \
+==== Numeros de Stirling (Primera y Segunda Especie)
+- *Primera especie* (numero de permutaciones con $k$ ciclos disjuntos): \
   $S(n, k) = (n-1) dot S(n-1, k) + S(n-1, k-1)$
-- *Segunda especie* (maneras de particionar un conjunto de $n$ objetos en $k$ subconjuntos no vacíos): \
+- *Segunda especie* (maneras de particionar un conjunto de $n$ objetos en $k$ subconjuntos no vacios): \
   $S(n, k) = k dot S(n-1, k) + S(n-1, k-1)$
 
-==== Números de Bell
-Cuenta el número total de particiones posibles de un conjunto.
+==== Numeros de Bell
+Cuenta el numero total de particiones posibles de un conjunto.
 $ B_(n+1) = sum_(k=0)^n binom(n, k) dot B_k $
 
 
-=== Matemáticas
+=== Matematicas
 
-==== Fórmulas Generales
+==== Formulas Generales
 - $a^k - b^k = (a-b) dot (a^(k-1)b^0 + a^(k-2)b^1 + ... + a^0 b^(k-1))$
 - $|a-b| + |b-c| + |c-a| = 2(max(a, b, c) - min(a, b, c))$
 
@@ -43,37 +44,37 @@ $ B_(n+1) = sum_(k=0)^n binom(n, k) dot B_k $
 $ (sum_(k=1)^n a_k^2)(sum_(k=1)^n b_k^2) - (sum_(k=1)^n a_k b_k)^2 = \
    1/2 sum_(i=1)^n sum_(j=1)^n (a_i b_j - a_j b_i)^2 $
 
-==== Fórmulas de Vieta
-Para un polinomio de grado $n$: $p(x) = a_n x^n + a_(n-1) x^(n-1) + ... + a_0$ con raíces $r_1, r_2, ..., r_n$:
+==== Formulas de Vieta
+Para un polinomio de grado $n$: $p(x) = a_n x^n + a_(n-1) x^(n-1) + ... + a_0$ con raices $r_1, r_2, ..., r_n$:
 - $r_1 + r_2 + ... + r_n = - a_(n-1) / a_n$
 - $r_1 r_2 ... r_n = (-1)^n a_0 / a_n$
 
-==== Sucesión de Fibonacci
+==== Sucesion de Fibonacci
 - $F_n = sum_(k=0)^floor((n-1)/2) binom(n-k-1, k)$
-- *Fórmula de Binet:* $F_n = 1/sqrt(5) (((1+sqrt(5))/2)^n - ((1-sqrt(5))/2)^n)$
+- *Formula de Binet:* $F_n = 1/sqrt(5) (((1+sqrt(5))/2)^n - ((1-sqrt(5))/2)^n)$
 - $sum_(i=1)^n F_i = F_(n+2) - 1$
 - $gcd(F_m, F_n) = F_(gcd(m, n))$
 
-==== Ternas Pitagóricas
-Fórmula de Euclides para generar ternas donde $a^2 + b^2 = c^2$:
+==== Ternas Pitagoricas
+Formula de Euclides para generar ternas donde $a^2 + b^2 = c^2$:
 Para $m > n > 0$:
 $ a = m^2 - n^2, quad b = 2m n, quad c = m^2 + n^2 $
 
 
-=== Teoría de Números
+=== Teoria de Numeros
 
-==== Función Totiente de Euler ($phi$)
+==== Funcion Totiente de Euler ($phi$)
 - $phi(n) = n product_(p | n) (1 - 1/p)$ donde $p$ son factores primos distintos.
 - Si $a$ y $b$ son coprimos, entonces $phi(a dot b) = phi(a) dot phi(b)$
 - $sum_(d | n) phi(d) = n$
 
-==== Función e Inversión de Möbius
+==== Funcion e Inversion de Mobius
 $mu(n)$ toma valores en $\{-1, 0, 1\}$:
 - $1$ si es libre de cuadrados con cantidad par de factores primos.
 - $-1$ si es libre de cuadrados con cantidad impar de factores primos.
-- $0$ si contiene algún factor primo al cuadrado.
+- $0$ si contiene algun factor primo al cuadrado.
 
-*Teorema de inversión de Möbius:* Si $g(n) = sum_(d | n) f(d)$, entonces:
+*Teorema de inversion de Mobius:* Si $g(n) = sum_(d | n) f(d)$, entonces:
 $ f(n) = sum_(d | n) mu(d) g(n/d) $
 
 ==== MCD (GCD) y MCM (LCM)
@@ -82,13 +83,39 @@ $ f(n) = sum_(d | n) mu(d) g(n/d) $
 - $sum_(k=1)^n gcd(k, n) = sum_(d | n) d dot phi(n/d)$
 
 
-=== Operaciones de Bits (Bitwise) y Miscelánea
+=== Operaciones de Bits (Bitwise) y Miscelanea
 - $a + b = (a plus.circle b) + 2(a "AND" b)$
 - $a + b = (a | b) + (a "AND" b)$
-- El $k$-ésimo bit está encendido en $x$ si y solo si $x mod 2^k >= 2^(k-1)$.
+- El $k$-esimo bit esta encendido en $x$ si y solo si $x mod 2^k >= 2^(k-1)$.
 - $1 plus.circle 2 plus.circle 3 plus.circle ... plus.circle (4k-1) = 0$ para todo $k >= 0$.
 
-==== Teorema de Erdős–Gallai
+==== Teorema de Erdos-Gallai
 Una secuencia descendente de grados $d_1 >= d_2 >= ... >= d_n$ puede representar un grafo simple finito si la suma total de grados es par y:
 $ sum_(i=1)^k d_i <= k(k-1) + sum_(i=k+1)^n min(d_i, k) \
   quad text("para cada ") 1 <= k <= n $
+
+
+=== Geometria
+
+==== Teorema de Pick
+Para un poligono simple con vertices de coordenadas enteras:
+
+$ A = I + B/2 - 1 $
+
+Donde:
+- $A$: Area del poligono.
+- $I$: Numero de puntos enteros estrictamente interiores.
+- $B$: Numero de puntos enteros sobre el borde.
+
+*Puntos enteros interiores:*
+$ I = A - B/2 + 1 $
+
+*Puntos enteros en un segmento:*
+Para dos puntos $(x_1,y_1)$ y $(x_2,y_2)$:
+
+$ "Puntos" = gcd(|x_2-x_1|, |y_2-y_1|) + 1 $
+
+*Puntos enteros en el borde de un poligono:*
+Para $n$ vertices consecutivos, con indices ciclicos:
+
+$ B = sum_(i=0)^(n-1) gcd(|x_(i+1)-x_i|, |y_(i+1)-y_i|) $
